@@ -1,14 +1,10 @@
 import { useRef } from 'react';
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 
-// Elegant geometric mandala-inspired SVG motif
-function Mandala({ size = 200, opacity = 0.3 }) {
-  const n = 12;
-  const r1 = size * 0.45;
-  const r2 = size * 0.3;
-  const r3 = size * 0.15;
-  const cx = size / 2, cy = size / 2;
-  const pts = Array.from({ length: n }, (_, i) => {
+function Mandala({ size = 200 }) {
+  const n = 12, cx = size / 2, cy = size / 2;
+  const r1 = size * 0.44, r2 = size * 0.28, r3 = size * 0.14;
+  const pts  = Array.from({ length: n }, (_, i) => {
     const a = (i / n) * Math.PI * 2 - Math.PI / 2;
     return { x: cx + r1 * Math.cos(a), y: cy + r1 * Math.sin(a) };
   });
@@ -16,97 +12,98 @@ function Mandala({ size = 200, opacity = 0.3 }) {
     const a = (i / n) * Math.PI * 2 - Math.PI / 2 + Math.PI / n;
     return { x: cx + r2 * Math.cos(a), y: cy + r2 * Math.sin(a) };
   });
-
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ opacity }}>
-      <g stroke="url(#mg)" strokeWidth="0.5" fill="none">
-        {pts.map((p, i) => (
-          <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} />
-        ))}
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <defs>
+        <linearGradient id="mg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stopColor="#D4A847" />
+          <stop offset="100%" stopColor="#D4691E" />
+        </linearGradient>
+      </defs>
+      <g stroke="url(#mg)" strokeWidth="0.6" fill="none" opacity="0.7">
+        {pts.map((p, i) => <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} />)}
         <polygon points={pts.map(p => `${p.x},${p.y}`).join(' ')} />
         <polygon points={pts2.map(p => `${p.x},${p.y}`).join(' ')} />
         <circle cx={cx} cy={cy} r={r1} />
         <circle cx={cx} cy={cy} r={r2} />
         <circle cx={cx} cy={cy} r={r3} />
-        {pts.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={3} fill="url(#mg)" />
-        ))}
+        {pts.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={2.5} fill="url(#mg)" />)}
       </g>
-      <defs>
-        <linearGradient id="mg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#C8973A" />
-          <stop offset="100%" stopColor="#D4691E" />
-        </linearGradient>
-      </defs>
     </svg>
   );
 }
 
 export default function Banaras() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-100px' });
+  const ref    = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const y = useTransform(scrollYProgress, [0, 1], [-30, 30]);
+  const y = useTransform(scrollYProgress, [0, 1], [-25, 25]);
 
   return (
-    <section className="relative overflow-hidden py-32" ref={ref}
-             style={{ background: 'linear-gradient(135deg, #1A0A0F 0%, #0D0408 50%, #2A0F1C 100%)' }}>
-      {/* Parallax mandala */}
-      <motion.div style={{ y }} className="absolute -top-16 -right-16 opacity-20 pointer-events-none">
-        <Mandala size={400} opacity={1} />
+    <section className="relative overflow-hidden py-28" ref={ref}
+             style={{ background: 'linear-gradient(160deg, #1A0D18 0%, #141C2A 50%, #1C0D18 100%)' }}>
+
+      {/* Parallax mandalas — decorative only, not overwhelming */}
+      <motion.div style={{ y }} className="absolute -top-12 -right-12 pointer-events-none opacity-25">
+        <Mandala size={360} />
       </motion.div>
-      <motion.div style={{ y: y }} className="absolute -bottom-16 -left-16 opacity-10 pointer-events-none">
-        <Mandala size={300} opacity={1} />
+      <motion.div style={{ y }} className="absolute -bottom-12 -left-12 pointer-events-none opacity-12">
+        <Mandala size={280} />
       </motion.div>
 
-      <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
+      <div className="max-w-3xl mx-auto px-6 text-center relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.7 }}
         >
-          {/* Ornamental line */}
+          {/* Ornamental divider */}
           <div className="flex items-center justify-center gap-4 mb-8">
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-gold/50" />
-            <div className="w-2 h-2 rounded-full bg-gold" />
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-gold/50" />
+            <div className="h-px w-14" style={{ background: 'linear-gradient(to right, transparent, #D4A847)' }} />
+            <div className="w-2 h-2 rounded-full" style={{ background: '#D4A847' }} />
+            <div className="h-px w-14" style={{ background: 'linear-gradient(to left, transparent, #D4A847)' }} />
           </div>
 
-          <p className="text-xs tracking-[0.5em] uppercase text-gold/50 mb-6">The Kashi Connection</p>
+          <p className="text-xs tracking-[0.5em] uppercase font-medium mb-5" style={{ color: '#D4A847' }}>
+            The Kashi Connection
+          </p>
 
-          <h2 className="font-display text-5xl md:text-7xl font-light text-cream leading-tight mb-6">
+          <h2 className="font-display font-light leading-tight mb-5"
+              style={{ fontSize: 'clamp(2.4rem,5vw,4.5rem)', color: '#FFFFFF' }}>
             Designed in Banaras,<br />
-            <span className="italic text-gold-gradient">Trusted Everywhere</span>
+            <em className="not-italic text-gold-gradient font-medium">Trusted Everywhere</em>
           </h2>
 
-          {/* Hindi/Bhojpuri touch */}
+          {/* Hindi text */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.4 }}
-            className="font-devanagari text-2xl md:text-3xl text-gold/80 my-8 tracking-wide"
+            transition={{ delay: 0.35 }}
+            className="font-devanagari text-2xl md:text-3xl my-7 tracking-wide"
+            style={{ color: '#E8C06A' }}
           >
             "काशी के रचना, व्यापार के पहचान"
           </motion.p>
-          <p className="text-xs text-gold/30 tracking-widest mb-10 italic">
+          <p className="text-xs italic mb-9" style={{ color: '#8FA3BA', letterSpacing: '0.05em' }}>
             Kashi's craft, your business's identity
           </p>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.5 }}
-            className="text-cream/60 text-lg leading-relaxed max-w-2xl mx-auto"
+            transition={{ delay: 0.45 }}
+            className="text-lg leading-relaxed"
+            style={{ color: '#D1D9E6' }}
           >
             Varanasi — the oldest living city in the world — has always been a centre of artistry and craft.
-            We carry that legacy into modern packaging design, bringing the precision of Banarasi craftsmanship
-            to every label, box, and brand identity we create.
+            We carry that legacy into modern packaging design, bringing the precision of Banarasi
+            craftsmanship to every label, box, and brand identity we create.
           </motion.p>
 
           <div className="flex items-center justify-center gap-4 mt-10">
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-gold/50" />
-            <div className="w-2 h-2 rounded-full bg-gold" />
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-gold/50" />
+            <div className="h-px w-14" style={{ background: 'linear-gradient(to right, transparent, #D4A847)' }} />
+            <div className="w-2 h-2 rounded-full" style={{ background: '#D4A847' }} />
+            <div className="h-px w-14" style={{ background: 'linear-gradient(to left, transparent, #D4A847)' }} />
           </div>
         </motion.div>
       </div>

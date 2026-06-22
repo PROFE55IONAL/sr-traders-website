@@ -4,28 +4,30 @@ import { MapPin } from 'lucide-react';
 import { portfolioItems } from '../data/portfolio';
 
 export default function About() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-100px' });
-
+  const ref    = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
   const showcase = portfolioItems.slice(0, 6);
 
   return (
-    <section id="about" className="section-pad bg-[#0D0408]" ref={ref}>
+    <section id="about" className="section-pad" ref={ref}
+             style={{ background: 'rgba(15,30,46,0.55)' }}>
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
+
           {/* Text */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -24 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.65 }}
           >
-            <p className="text-xs tracking-[0.4em] uppercase text-gold/50 mb-4">Our Story</p>
-            <h2 className="font-display text-5xl md:text-6xl font-light text-cream mb-8">
-              About<br />
-              <span className="italic text-gold-gradient">SR Traders</span>
+            <p className="text-xs tracking-[0.4em] uppercase font-medium mb-3" style={{ color: '#D4A847' }}>
+              Our Story
+            </p>
+            <h2 className="font-display font-light mb-8" style={{ fontSize: 'clamp(2.2rem,4vw,3.5rem)', color: '#FFFFFF' }}>
+              About <em className="not-italic text-gold-gradient">SR Traders</em>
             </h2>
 
-            <div className="space-y-5 text-cream/60 leading-relaxed">
+            <div className="space-y-4 text-sm leading-relaxed" style={{ color: '#C5D0DC' }}>
               <p>
                 SR Traders is a premium packaging design and branding studio based in Varanasi, Uttar Pradesh.
                 We have spent over 15 years helping businesses build strong product identities through
@@ -33,7 +35,7 @@ export default function About() {
               </p>
               <p>
                 From a single medicine box for a local pharma company to a complete product range
-                for FMCG brands — we bring the same dedication and craft to every project.
+                for FMCG brands — we bring the same dedication to every project.
                 Our work spans medicine cartons, ayurvedic packaging, cosmetic labels,
                 FMCG products, cleaning brands, industrial stickers, and visiting cards.
               </p>
@@ -44,16 +46,16 @@ export default function About() {
               </p>
             </div>
 
-            <div className="flex items-center gap-2 mt-8 text-gold/70 text-sm">
+            <div className="flex items-center gap-2 mt-7 text-sm" style={{ color: '#D4A847' }}>
               <MapPin size={14} />
               <span>Varanasi (Banaras), Uttar Pradesh, India</span>
             </div>
 
-            <div className="mt-10 grid grid-cols-3 gap-6 pt-8 border-t border-white/5">
-              {[['Pharma','Medicine & Ayurvedic'],['FMCG','Labels & Packaging'],['Industrial','Stickers & Branding']].map(([t,s]) => (
+            <div className="grid grid-cols-3 gap-5 mt-10 pt-8" style={{ borderTop: '1px solid rgba(255,255,255,0.10)' }}>
+              {[['Pharma','Medicine & Ayurvedic'],['FMCG','Labels & Packaging'],['Industrial','Stickers & Branding']].map(([t, s]) => (
                 <div key={t}>
-                  <div className="text-gold text-xs tracking-widest uppercase mb-1">{t}</div>
-                  <div className="text-cream/40 text-xs">{s}</div>
+                  <div className="text-xs tracking-widest uppercase font-semibold mb-1" style={{ color: '#D4A847' }}>{t}</div>
+                  <div className="text-xs" style={{ color: '#8FA3BA' }}>{s}</div>
                 </div>
               ))}
             </div>
@@ -61,23 +63,25 @@ export default function About() {
 
           {/* Image grid */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 24 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="grid grid-cols-3 gap-3"
+            transition={{ duration: 0.65, delay: 0.15 }}
+            className="grid grid-cols-3 gap-2.5"
           >
             {showcase.map((item, i) => (
               <motion.div
                 key={item.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.3 + i * 0.08 }}
-                className={`overflow-hidden rounded-sm border border-gold/10 ${i === 0 ? 'col-span-2 row-span-1' : ''}`}
+                transition={{ delay: 0.2 + i * 0.07 }}
+                className={`overflow-hidden rounded-sm ${i === 0 ? 'col-span-2' : ''}`}
+                style={{ border: '1px solid rgba(212,168,71,0.15)' }}
               >
                 <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
               </motion.div>
             ))}
           </motion.div>
+
         </div>
       </div>
     </section>
